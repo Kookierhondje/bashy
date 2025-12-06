@@ -6,32 +6,6 @@ export ROCM_PATH=/opt/rocm
 export HSA_OVERRIDE_GFX_VERSION=10.3.0
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
-# Dog colors
-colors() {
-	local fgc bgc vals seq0
-
-	printf "Color escapes are %s\n" '\e[${value};...;${value}m'
-	printf "Values 30..37 are \e[33mforeground colors\e[m\n"
-	printf "Values 40..47 are \e[43mbackground colors\e[m\n"
-	printf "Value  1 gives a  \e[1mbold-faced look\e[m\n\n"
-
-	# foreground colors
-	for fgc in {30..37}; do
-		# background colors
-		for bgc in {40..47}; do
-			fgc=${fgc#37} # white
-			bgc=${bgc#40} # black
-			vals="${fgc:+$fgc;}${bgc}"
-			vals=${vals%%;}
-
-			seq0="${vals:+\e[${vals}m}"
-			printf "  %-9s" "${seq0:-(default)}"
-			printf " ${seq0}TEXT\e[m"
-			printf " \e[${vals:+${vals+$vals;}}1mBOLD\e[m" 
-		done
-		echo; echo
-	done
-}
 #
 [ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
 
@@ -98,23 +72,39 @@ alias cp="cp -i"                          # confirm before overwriting something
 alias df='df -h'                          # human-readable sizes
 alias free='free -m'                      # show sizes in MB
 
-# Some Python Ease of use Aliases. 
-alias dec='deactivate'
+#xfce alias
 alias dnd='xfconf-query -c xfce4-notifyd -p /do-not-disturb -T'
-alias pvn='python -m venv venv'
-alias pup='pip install --upgrade pip'
-vba() {
-    current_dir=$(pwd)
-    venv_activate="$current_dir/venv/bin/activate"
-    if [ -f "$venv_activate" ]; then
-        # Source the activate script
-        source "$venv_activate"
-        echo "Activated virtual environment in $current_dir/venv"
-    else
-        echo "No virtual environment found at $venv_activate "
-    fi
-}
 
+# config aliases
+alias editbrc='nvim ~/.bashrc'
+alias editpy='nvim ~/.python_bash_aliases'
+alias editqtile='nvim ~/.config/qtile/config.py'
+alias editvim='python ~/.config/nvim/init.lua'
+
+#Coding Aliases 
+alias tosaas='cd /home/jerry/Code/mud_stuff/saas/evennia/'
+alias tocode='cd /home/jerry/Code/'
+
+# Some Python Ease of use Aliases. 
+#alias py='python'
+#alias dec='deactivate'
+#alias pvn='python -m venv venv'
+#alias pup='pip install --upgrade pip'
+#vba() {
+#    current_dir=$(pwd)
+#    venv_activate="$current_dir/venv/bin/activate"
+#    if [ -f "$venv_activate" ]; then
+#        # Source the activate script
+#        source "$venv_activate"
+#        echo "Activated virtual environment in $current_dir/venv"
+#    else
+#        echo "No virtual environment found at $venv_activate "
+#    fi
+#}
+
+if [ -f ~/.python_bash_aliases ]; then
+    source ~/.python_bash_aliases
+fi
 
 xhost +local:root > /dev/null 2>&1
 
@@ -126,18 +116,19 @@ shopt -s checkwinsize
 
 shopt -s expand_aliases
 
+# Dog colors
 # Define color variables
 BRN='\[\033[38;5;94m\]'     # Brown (256-color)
 GRY='\[\033[38;5;250m\]'    # Light gray
 MAG='\[\033[0;35m\]'        # Magenta
 BLU='\[\033[38;5;33m\]'     # Blue
 RST='\[\033[0m\]'           # Reset
-alias clrs='printf "${BRN}brown${GRY}gray${MAG}magenta${BLU}blue${RST}reset"'
+#alias clrs='printf "${BRN}brown${GRY}gray${MAG}magenta${BLU}blue${RST}reset"'
 export PS1="${MAG}[${BRN}K${GRY}o${BRN}o${GRY}k${BRN}i${GRY}e${BRN}r${GRY}h${BRN}o${GRY}n${BRN}d${GRY}j${BRN}e ${RST}in ${BLU}\W ${MAG}]\$${RST} "
-# Build the prompt
 # export QT_SELECT=4
 # Enable history appending instead of overwriting.  #139609
 shopt -s histappend
 # For the better man exp!
 export MANPAGER='nvim +Man!'
 set -o vi
+
